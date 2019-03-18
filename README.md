@@ -48,7 +48,7 @@ lerna init
 # bootstrap 将把repo中的依赖关系链接在一起.
 lerna bootstrap
 
-# 更新版本
+# 更新版本(不用主动去更新，直接执行发布，根据提示选择操作即可)
 # 使用与 npm version 相同的语法，更新版本号，如
 lerna version patch
 
@@ -57,6 +57,6 @@ lerna version patch
 # - @xmini/package-2: 0.0.1 => 0.0.2
 
 # 发布到 npm
-# publish将帮助发布任何更新的包
+# publish将帮助发布任何更新的包（如果包未更新，会忽略）
 lerna publish
 ```
