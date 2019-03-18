@@ -56,6 +56,12 @@ lerna version patch
 # - @xmini/package-1: 0.0.1 => 0.0.2
 # - @xmini/package-2: 0.0.1 => 0.0.2
 
+# 可以为指定包添加依赖
+lerna add is --scope=@xmini/package-1
+
+# updated 可以查看哪些包发生了改变
+lerna updated
+
 # 发布到 npm
 # publish将帮助发布任何更新的包（如果包未更新，会忽略）
 lerna publish
