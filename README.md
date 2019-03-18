@@ -2,7 +2,7 @@
 
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
 
-学习 lerna 的使用
+学习 lerna 的使用。最好的方式，就是亲手操作一遍
 
 参考：
 
