@@ -49,7 +49,12 @@ lerna init
 lerna bootstrap
 
 # 更新版本
-lerna version 0.0.2
+# 使用与 npm version 相同的语法，更新版本号，如
+lerna version patch
+
+# Changes:
+# - @xmini/package-1: 0.0.1 => 0.0.2
+# - @xmini/package-2: 0.0.1 => 0.0.2
 
 # 发布到 npm
 # publish将帮助发布任何更新的包
