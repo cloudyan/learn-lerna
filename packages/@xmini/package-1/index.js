@@ -1,3 +1,3 @@
 module.exports = {
-  test: 'hello world',
+  test: 'hello world2',
 }
