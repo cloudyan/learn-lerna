@@ -1,6 +1,6 @@
 {
   "name": "@xmini/package-2",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -8,5 +8,8 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@xmini/package-1": "^0.0.1"
+  }
 }
