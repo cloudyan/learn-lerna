@@ -14,6 +14,7 @@
   - [常见问题](https://github.com/chinanf-boy/lerna-zh/blob/master/FAQ.zh.md)
 - [https://lernajs.io/](https://lernajs.io/)
   - [lerna-wizard lerna的命令行向导](https://github.com/szarouski/lerna-wizard)
+  - [使用lerna管理大型前端项目](https://www.jianshu.com/p/2f9c05b119c9)
 
 **管理多个 repo ：**
 
@@ -48,6 +49,8 @@ lerna init
 # bootstrap 将把repo中的依赖关系链接在一起.
 lerna bootstrap
 
+lerna bootstrap --hoist ? 这个是什么
+
 # 更新版本(不用主动去更新，直接执行发布，根据提示选择操作即可)
 # 使用与 npm version 相同的语法，更新版本号，如
 lerna version patch
@@ -58,6 +61,8 @@ lerna version patch
 
 # 可以为指定包添加依赖
 lerna add is --scope=@xmini/package-1
+
+npm install jest --only=dev
 
 # updated 可以查看哪些包发生了改变
 lerna updated
