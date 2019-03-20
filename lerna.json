@@ -1,9 +1,10 @@
 {
   "version": "0.0.5",
-  "packages": [
-    "packages/*"
-  ],
+  "npmClient": "yarn",
   "useWorkspaces": true,
+  "packages": [
+    "packages/@xmini/*"
+  ],
   "command": {
     "publish": {
       "ignoreChanges": [

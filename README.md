@@ -15,6 +15,7 @@
 - [https://lernajs.io/](https://lernajs.io/)
   - [lerna-wizard lerna的命令行向导](https://github.com/szarouski/lerna-wizard)
   - [使用lerna管理大型前端项目](https://www.jianshu.com/p/2f9c05b119c9)
+- [lerna-yarn-workspaces-example](https://github.com/Quramy/lerna-yarn-workspaces-example)
 
 **管理多个 repo ：**
 
@@ -24,6 +25,8 @@
 - 方便管理版本和 dependencies
 - 跨项目的操作和修改变得容易
 - 方便生成总的 changelog
+
+useWorkspaces 应该是只针对 yarn 的
 
 ## 安装
 
@@ -60,7 +63,8 @@ lerna version patch
 # - @xmini/package-2: 0.0.1 => 0.0.2
 
 # 可以为指定包添加依赖
-lerna add is --scope=@xmini/package-1
+lerna add @types/node --scope=@xmini/package-1
+lerna add --dev typescript --scope=@xmini/package-1
 
 npm install jest --only=dev
 
