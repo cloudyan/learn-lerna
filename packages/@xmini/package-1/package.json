@@ -2,7 +2,8 @@
   "name": "@xmini/package-1",
   "version": "0.0.5",
   "description": "",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "files": [
     "*.js",
     "package.json"
