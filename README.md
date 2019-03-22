@@ -28,7 +28,42 @@
 
 useWorkspaces 应该是只针对 yarn 的
 
-## 安装
+## Workspaces
+
+Using [yarn workspace feature](https://yarnpkg.com/en/docs/workspaces), configure the following files:
+
+- /package.json
+
+Append the `workspaces` key.
+
+```json
+{
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ]
+}
+```
+
+- lerna.json
+
+Set `npmClient` `"yarn"` and turn `useWorkspaces` on.
+
+```json
+{
+  "lerna": "2.2.0",
+  "packages": [
+    "packages/*"
+  ],
+  "npmClient": "yarn",
+  "useWorkspaces": true,
+  "version": "1.0.0"
+}
+```
+
+Exec `yarn install`(or `lerna bootstrap`). After successful running, all dependency packages are downloaded under the repository root `node_modules` directory.
+
+## 其他
 
 建议使用 `npx`, 如 `npx lerna init`
 
