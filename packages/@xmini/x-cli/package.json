@@ -1,6 +1,6 @@
 {
   "name": "@xmini/x-cli",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "",
   "main": "lib/index.js",
   "publishConfig": {
@@ -17,6 +17,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@xmini/x-core": "^0.0.6"
+    "@xmini/x-core": "^0.0.7"
   }
 }
