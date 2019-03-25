@@ -1,6 +1,6 @@
 {
   "name": "@xmini/package-2",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "",
   "main": "index.js",
   "publishConfig": {
@@ -13,7 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@xmini/package-1": "^0.0.7",
+    "@xmini/package-1": "^0.0.8",
     "is": "^3.3.0"
   }
 }
