@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "publishConfig": {
-    "registry": "http://maven.doweidu.com/repository/xmini/"
+    "registry": "http://maven.doweidu.com/repository/npm-hosted/"
   },
   "files": [
     "lib/*.js",

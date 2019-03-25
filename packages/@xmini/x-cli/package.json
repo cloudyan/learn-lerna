@@ -4,7 +4,7 @@
   "description": "",
   "main": "lib/index.js",
   "publishConfig": {
-    "registry": "http://maven.doweidu.com/repository/xmini/"
+    "registry": "http://maven.doweidu.com/repository/npm-hosted/"
   },
   "files": [
     "lib/*.js",
@@ -18,5 +18,6 @@
   "license": "ISC",
   "dependencies": {
     "@xmini/x-core": "^0.0.8"
-  }
+  },
+  "gitHead": "83ae1955dce379a9c9574782f8d279e119e31fb9"
 }
