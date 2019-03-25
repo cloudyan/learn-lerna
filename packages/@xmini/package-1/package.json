@@ -1,23 +1,12 @@
 {
   "name": "@xmini/package-1",
-  "version": "0.0.6",
+  "version": "0.0.5",
   "description": "",
-  "main": "lib/index.js",
-  "typings": "lib/index.d.ts",
-  "files": [
-    "*.js",
-    "package.json"
-  ],
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@types/node": "^11.11.4"
-  },
-  "devDependencies": {
-    "typescript": "^3.3.4000"
-  }
+  "license": "ISC"
 }

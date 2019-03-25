@@ -1,0 +1,23 @@
+{
+  "name": "@xmini/x-core",
+  "version": "0.0.6",
+  "description": "",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "*.js",
+    "package.json"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^11.11.4"
+  },
+  "devDependencies": {
+    "typescript": "^3.3.4000"
+  }
+}
