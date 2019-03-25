@@ -4,8 +4,11 @@
   "description": "",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
+  "publishConfig": {
+    "registry": "http://maven.doweidu.com/repository/xmini/"
+  },
   "files": [
-    "*.js",
+    "lib/*.js",
     "package.json"
   ],
   "scripts": {

@@ -7,6 +7,7 @@
   "scripts": {
     "boot": "yarn install && lerna bootstrap",
     "release": "yarn --pure-lockfile && yarn clean && node scripts/release.js",
+    "preinstall": "yarn config set registry http://maven.doweidu.com/repository/xmini/",
     "lint": "eslint --fix packages/**/*.js",
     "commit": "npm run lint & npx git-cz",
     "clean": "rimraf packages/**/lib",

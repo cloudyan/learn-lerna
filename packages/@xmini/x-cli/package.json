@@ -3,6 +3,13 @@
   "version": "0.0.6",
   "description": "",
   "main": "lib/index.js",
+  "publishConfig": {
+    "registry": "http://maven.doweidu.com/repository/xmini/"
+  },
+  "files": [
+    "lib/*.js",
+    "package.json"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
