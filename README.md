@@ -1,6 +1,6 @@
 # learn-lerna
 
-[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
+[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/) [![Greenkeeper badge](https://badges.greenkeeper.io/cloudyan/learn-lerna.svg)](https://greenkeeper.io/)
 
 学习 lerna 的使用。最好的方式，就是亲手操作一遍
 
