@@ -1,0 +1,13 @@
+{
+  "groups": {
+    "default": {
+      "packages": [
+        "package.json",
+        "packages/@xmini/package-1/package.json",
+        "packages/@xmini/package-2/package.json",
+        "packages/@xmini/x-cli/package.json",
+        "packages/@xmini/x-core/package.json"
+      ]
+    }
+  }
+}
