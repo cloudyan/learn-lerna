@@ -16,6 +16,8 @@
   - [lerna-wizard lerna的命令行向导](https://github.com/szarouski/lerna-wizard)
   - [使用lerna管理大型前端项目](https://www.jianshu.com/p/2f9c05b119c9)
 - [lerna-yarn-workspaces-example](https://github.com/Quramy/lerna-yarn-workspaces-example)
+- 独立模式 [lerna-semantic-release](https://github.com/atlassian/lerna-semantic-release/blob/caribou/package.json)
+
 
 **管理多个 repo ：**
 
@@ -109,4 +111,35 @@ lerna updated
 # 发布到 npm
 # publish将帮助发布任何更新的包（如果包未更新，会忽略）
 lerna publish
+```
+
+Set up yarn的workspaces模式
+
+https://juejin.im/post/5ced1609e51d455d850d3a6c
+
+- `lerna init` 初始化项目
+- `lerna bootstrap` 安装依赖
+  - 默认是npm, 而且每个子package都有自己的node_modules
+  - 配置 `yarn+workspaces` 后，只有顶层有一个node_modules
+- `lerna list` 列出所有的包
+- `lerna create <name> [loc]` 创建一个包 默认放在 `workspaces[0]`所指位置
+- `lerna run <script>` 运行所有包里面的有这个script的命令
+- `lerna exec` 运行任意命令在每个包
+- `lerna clean` 删除所有包的node_modules目录
+- `lerna changed` 列出下次发版lerna publish 要更新的包。
+- `lerna publish` 会打tag，上传git,上传npm。
+  - 需要在packages.json添加 "publishConfig": { "access": "public" },
+
+配置 yarn + workspaces
+
+```bash
+# package.json 文件加入
+"private": true,
+"workspaces": [
+  "packages/*"
+],
+
+# lerna.json 文件加入
+"useWorkspaces": true,
+"npmClient": "yarn",
 ```
