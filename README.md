@@ -62,7 +62,7 @@ lerna 默认并行构建 5 个进程，构建(build) 时没问题，但开发时
 
 - [lerna-monorepo-example](https://github.com/cloudyan/lerna-monorepo-example)
   - 分支
-    - npm
+    - main(使用 npm)
     - pnpm
 - [lowcode-monorepo](https://github.com/cloudyan/lowcode-monorepo)
 
