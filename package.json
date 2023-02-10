@@ -2,19 +2,13 @@
   "name": "root",
   "private": true,
   "workspaces": [
-    "packages/@xmini/*"
+    "packages/*",
+    "app/*"
   ],
   "scripts": {
-    "boot": "yarn install && lerna bootstrap",
-    "release": "yarn --pure-lockfile && yarn clean && node scripts/release.js",
-    "preinstall": "yarn config set registry http://maven.doweidu.com/repository/xmini/",
-    "lint": "eslint --fix packages/**/*.js",
-    "commit": "npm run lint & npx git-cz",
-    "clean": "rimraf packages/**/lib",
-    "build": "tsc -b packages/@xmini/package-1 packages/@xmini/package-2",
-    "test": "lerna run test"
+
   },
   "devDependencies": {
-    "lerna": "^3.13.1"
+
   }
 }

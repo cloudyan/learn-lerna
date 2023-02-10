@@ -4,6 +4,72 @@
 
 学习 lerna 的使用。最好的方式，就是亲手操作一遍
 
+learn 差点死掉，之间我切换 [turborepo](https://turbo.build/) 玩了一阵, lerna 被 nx 收购，起死回生了，并且有个较大提升，同时 pnpm 支持也还好。
+
+## 项目初始化
+
+monorepo
+
+```bash
+npx lerna init
+```
+
+- [使用 pnpm](https://lerna.js.org/docs/recipes/using-pnpm-with-lerna)
+
+``` js
+// 1. lerna.json 添加以下配置
+"npmClient": "pnpm",
+
+// 2. 将以下配置
+// package.json
+{
+  "workspaces": ["packages/*"]
+}
+// lerna.json
+{
+  "packages": ["packages/*"]
+}
+
+// 3. 移动到 pnpm-workspace.yaml
+// pnpm-workspace.yaml
+packages:
+  - "packages/*"
+```
+
+执行 script task，可参考文档 [Run Tasks](https://lerna.js.org/docs/features/run-tasks)以及[示例库](https://github.com/lerna/getting-started-example)
+
+```bash
+# umi4 为对应的 package name
+"demo": "lerna run dev --scope=umi4",
+"dev": "lerna run dev --ignore=umi4",
+
+# 直接运行库和应用
+"dev": "lerna run dev",
+```
+
+构建依赖是自动识别的，无需 nx.json 就能完成自动构建依赖的管理
+
+> NOTE: 不要这样 `npm run dev && npm run demo`
+> 上面的命令开发运行时，包的构建命令不会退出，所以就没有 umi4 构建的启动
+
+lerna 默认并行构建 5 个进程，构建(build) 时没问题，但开发时就不行了，因为每个进程都不退出，后续的进程无法启动，开发态没有项目完整性，导致问题
+
+此时可以通过 `--concurrency=10` 参数增加并行任务数（依赖 nx-cloud?）
+
+> 目前并行任务多，有点卡，还需要继续测试验证。
+
+示例参考
+
+- [lerna-monorepo-example](https://github.com/cloudyan/lerna-monorepo-example)
+  - 分支
+    - npm
+    - pnpm
+- [lowcode-monorepo](https://github.com/cloudyan/lowcode-monorepo)
+
+## 以下是 learn@3.x 的学习
+
+---------------------------------------------------------
+
 参考：
 
 - [monorepo 新浪潮](https://juejin.im/entry/586f00bc128fe100580a6f78)
