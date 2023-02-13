@@ -12,6 +12,9 @@
     }
   },
   "targetDefaults": {
+    "dev": {
+      "dependsOn": ["^dev"]
+    },
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["{projectRoot}/dist"]

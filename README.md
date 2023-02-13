@@ -6,9 +6,38 @@
 
 learn 差点死掉，之间我切换 [turborepo](https://turbo.build/) 玩了一阵, lerna 被 nx 收购，起死回生了，并且有个较大提升，同时 pnpm 支持也还好。
 
+- [learn-lerna](#learn-lerna)
+  - [项目初始化](#项目初始化)
+    - [环境](#环境)
+    - [示例项目](#示例项目)
+    - [lerna与 pnpm 的 monorepo配置](#lerna与-pnpm-的-monorepo配置)
+    - [lerna scripts 配置](#lerna-scripts-配置)
+    - [问题](#问题)
+    - [nx 缓存](#nx-缓存)
+    - [关于发布](#关于发布)
+  - [以下是 learn@3.x 的学习](#以下是-learn3x-的学习)
+  - [Workspaces](#workspaces)
+  - [其他](#其他)
+
+
 ## 项目初始化
 
-monorepo
+### 环境
+
+- node@16.16.0
+- pnpm@7.27.0
+- lerna@6.4.1
+- nx@15.6.3
+
+### 示例项目
+
+- [lerna-monorepo-example](https://github.com/cloudyan/lerna-monorepo-example)
+  - 分支
+    - main(使用 npm)
+    - pnpm
+- [lowcode-monorepo](https://github.com/cloudyan/lowcode-monorepo)
+
+### lerna与 pnpm 的 monorepo配置
 
 ```bash
 npx lerna init
@@ -55,6 +84,8 @@ packages:
 }
 ```
 
+### lerna scripts 配置
+
 执行 script task，可参考文档 [Run Tasks](https://lerna.js.org/docs/features/run-tasks)以及[示例库](https://github.com/lerna/getting-started-example)
 
 ```bash
@@ -85,14 +116,63 @@ npx lerna run --ignore "package-@(1|2)" --ignore package-3 lint
 npx lerna run build --concurrency=5
 ```
 
-此时可以通过 `--concurrency=10` 参数增加并行任务数（依赖 nx-cloud?）,经验证，该 concurrency 参数没发现什么区别
+此时可以通过 `--concurrency=10` 参数增加并行任务数。
+
+解释: 此处参考 [--parallel](https://lerna.js.org/docs/lerna6-obsolete-options#--parallel) 中的解释，lerna 使用任务图来确认哪些任务可以并行运行并自动运行。
+
+> 如果你想限制任务的并发，你仍然可以使用[并发全局选项 --concurrency](https://github.com/lerna/lerna/blob/6cb8ab2d4af7ce25c812e8fb05cd04650105705f/core/global-options/README.md#--concurrency)来完成这个。
+> `--concurrency` Lerna 并行化任务时使用多少线程（默认为**逻辑 CPU 核心数**）。
+> 此处参数指定为限制并行的数量
 
 - 1. 并不是一定依赖 `@nrwl/nx-cloud` 需要使用云端配置
 - 2. 下方的 nx.json 同样支持并行任务
 
-> 目前并行任务多，有点卡，还需要继续测试验证。
+> 目前并行任务多，有点卡，还需要测试验证。
+> 怀疑根因就是并行任务太多，超过逻辑 CPU 核心数时，性能降低。
+> 当计算机没有开启超线程时，逻辑CPU的个数就是计算机的核数。而当超线程开启后，逻辑CPU的个数是核数的两倍。
+
+如何查看核心数
+
+以 `MacBook Pro (13-inch, 2020, Two Thunderbolt 3 ports)` 为例
+
+参考: https://cloud.tencent.com/developer/ask/sof/244076
+
+- `1.4 GHz 四核Intel Core i5`，这里是物理核心 4 核
+- 逻辑核心：查看活动监视器 => 双击 CPU 负载面板 => CPU历史记录 这里展示了所有的内核及数量
+- mac 可以使用命令查看
+  - `system_profiler SPHardwareDataType`
+  - `sysctl -n hw.logicalcpu`
+  - `sysctl -n hw.physicalcpu`
+  - `sysctl -n hw.ncpu`
+  - `getconf _NPROCESSORS_ONLN` 在Mac OS X和Linux中都可以工作
+  - `sysctl -a | sort | grep cpu` 提供有关 cpu 的所有信息(推荐)
+
+### 问题
+
+那么在 lowcode-monorepo 中不依赖 nx.json 仅调整并行数可以吗？
+
+经验证不可以，lerna 构建依赖是自动识别的。这导致了 dev 依赖执行存在问题。推测原因如下
+
+特定项目的依赖的构建未完成，导致该特定项目无法开始构建
+
+解决方案有两个
+
+1. 可以拆分为两个命令，比如 dev,lowcode-demo
+2. nx.json 中不要添加 dev 的依赖配置管理
+
+还有问题：关于 nx.json 中的 `targetDefaults` dependsOn，配置与不配置的区别是什么？
+
+详细参考：[target-defaults](https://lerna.js.org/docs/api-reference/configuration#target-defaults), 这里理解的还不是很深刻。
+
+关于执行顺序，参考 [add-caching](https://github.com/lerna/lerna/tree/main/packages/lerna/src/commands/add-caching#readme)
+
+### nx 缓存
 
 默认情况下，lerna（通过 nx）使用本地计算缓存。（缓存存储一周），要清除缓存运行 `nx reset`
+
+```bash
+npx lerna add-caching
+```
 
 如要共享缓存，可参考 https://lerna.js.org/docs/features/share-your-cache
 
@@ -121,14 +201,6 @@ nx.json 最终配置，更多配置项参考 [Nx.json文件](https://lerna.js.or
 }
 ```
 
-示例参考
-
-- [lerna-monorepo-example](https://github.com/cloudyan/lerna-monorepo-example)
-  - 分支
-    - main(使用 npm)
-    - pnpm
-- [lowcode-monorepo](https://github.com/cloudyan/lowcode-monorepo)
-
 这里可通过 `npx lerna add-caching` 配置缓存配置，并添加 `"extends": "nx/presets/npm.json",`
 
 > 请注意，旧版本的 Nx 使用 targetDependencies 而不是 targetDefaults。两者仍然有效，但建议使用 targetDefaults。
@@ -139,7 +211,7 @@ nx.json 最终配置，更多配置项参考 [Nx.json文件](https://lerna.js.or
 // nx.json
 "targetDefaults": {
   "dev": {
-    "dependsOn": ["^dev"] // 此处不能加，原因是特定项目的依赖的构建未完成，导致该特定项目无法开始构建
+    "dependsOn": ["^dev"] // 此处不能加，原因是特定项目的依赖的构建未完成，导致该特定项目无法开始构建(可以拆分为两个命令，比如 dev,lowcode-demo)
   },
   "build": {
     "dependsOn": ["^build"],
