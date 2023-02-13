@@ -56,7 +56,36 @@ lerna 默认并行构建 5 个进程，构建(build) 时没问题，但开发时
 
 此时可以通过 `--concurrency=10` 参数增加并行任务数（依赖 nx-cloud?）
 
+- 1. 并不是一定依赖 `@nrwl/nx-cloud` 需要使用云端配置
+- 2. 下方的 nx.json 同样支持并行任务
+
 > 目前并行任务多，有点卡，还需要继续测试验证。
+
+```js
+// nx.json
+{
+  "extends": "nx/presets/npm.json",
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx/tasks-runners/default",
+      "options": {
+        "cacheableOperations": [
+          "dev",
+          "build"
+        ]
+      }
+    }
+  },
+  "targetDependencies": {
+    "build": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ]
+  }
+}
+```
 
 示例参考
 
@@ -65,6 +94,49 @@ lerna 默认并行构建 5 个进程，构建(build) 时没问题，但开发时
     - main(使用 npm)
     - pnpm
 - [lowcode-monorepo](https://github.com/cloudyan/lowcode-monorepo)
+
+这里参考文档时，通过 `npx lerna add-caching` 操作添加的 nx.json 会 targetDefaults 配置，该配置会影响 concurrency，并且新增需要配置 `"extends": "nx/presets/npm.json",`
+
+```js
+// nx.json
+"targetDefaults": {
+  "dev": {
+    "dependsOn": [
+      "^dev"
+    ]
+  },
+  "build": {
+    "dependsOn": ["^build"],
+    "outputs": ["{projectRoot}/dist"]
+  }
+}
+```
+
+其他的一些配置参考
+
+- https://github.com/lerna/getting-started-example/blob/main/nx.json
+- https://github.com/vsavkin/lerna-dte/blob/main/nx.json
+
+```js
+//
+"tasksRunnerOptions": {
+  "default": {
+    "runner": "@nrwl/nx-cloud",
+    "options": {
+      "accessToken": "MzhiZmU3ODItNmUxYS00ZDg2LTg0NWQtMjRiNGFjNTBmM2I4fHJlYWQtd3JpdGU=",
+      "cacheableOperations": [
+        "dev",
+        "build",
+        "test"
+      ],
+      "parallel": 10,
+      "canTrackAnalytics": false,
+      "showUsageWarnings": true
+    }
+  }
+},
+```
+
 
 ## 以下是 learn@3.x 的学习
 
