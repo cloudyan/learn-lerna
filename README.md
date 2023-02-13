@@ -158,6 +158,9 @@ nx.json 最终配置，更多配置项参考 [Nx.json文件](https://lerna.js.or
   - 如果要跳过缓存 `npx lerna run build --skip-nx-cache`
 - 关于 [分布式任务](https://lerna.js.org/docs/concepts/dte-guide)
   - [示例 repo](https://github.com/vsavkin/lerna-dte)
+  - https://nx.dev/core-features/distribute-task-execution
+  - https://github.com/vsavkin/interstellar
+- [ci: github actions](https://nx.dev/recipes/ci/monorepo-ci-github-actions#distributed-ci-with-nx-cloud)
 
 ```js
 //
