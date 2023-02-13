@@ -5,10 +5,9 @@
     "packages/*",
     "app/*"
   ],
-  "scripts": {
-
-  },
+  "scripts": {},
   "devDependencies": {
-
+    "lerna": "^6.4.1",
+    "nx": "^15.6.3"
   }
 }

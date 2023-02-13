@@ -14,7 +14,9 @@ monorepo
 npx lerna init
 ```
 
-- [使用 pnpm](https://lerna.js.org/docs/recipes/using-pnpm-with-lerna)
+- [将 pnpm 与 lerna 结合使用](https://lerna.js.org/docs/recipes/using-pnpm-with-lerna)
+  - 默认情况下，lerna 使用 package.json 中的 workspaces 属性来搜索包。
+  - 如果使用 pnpm，lerna.json 中已设置 `npmClient: 'pnpm',`，这种情况下，lerna 将使用 pnpm-workspace.yaml 来搜索包。
 
 ``` js
 // 1. lerna.json 添加以下配置
@@ -36,9 +38,34 @@ packages:
   - "packages/*"
 ```
 
+最终 lerna.json
+
+```json
+{
+  "$schema": "node_modules/lerna/schemas/lerna-schema.json",
+  "useWorkspaces": true,
+  "npmClient": "pnpm",
+  "version": "0.0.0",
+  "command": {
+    "version": {
+      "allowBranch": "release",
+      "conventionalCommits": true
+    }
+  }
+}
+```
+
 执行 script task，可参考文档 [Run Tasks](https://lerna.js.org/docs/features/run-tasks)以及[示例库](https://github.com/lerna/getting-started-example)
 
 ```bash
+# 多个项目
+npx lerna run build --scope=header,footer
+npx lerna run build --ignore=header,footer
+# 支持 glob
+npx lerna run --scope package-1 --scope "*-2" lint
+npx lerna run --scope="package-{1,2,5}" test
+npx lerna run --ignore "package-@(1|2)" --ignore package-3 lint
+
 # umi4 为对应的 package name
 "demo": "lerna run dev --scope=umi4",
 "dev": "lerna run dev --ignore=umi4",
@@ -52,17 +79,26 @@ packages:
 > NOTE: 不要这样 `npm run dev && npm run demo`
 > 上面的命令开发运行时，包的构建命令不会退出，所以就没有 umi4 构建的启动
 
-lerna 默认并行构建 5 个进程，构建(build) 时没问题，但开发时就不行了，因为每个进程都不退出，后续的进程无法启动，开发态没有项目完整性，导致问题
+如果要将运行脚本的进程数增加到 5（默认情况下为 3），请传递以下内容：
 
-此时可以通过 `--concurrency=10` 参数增加并行任务数（依赖 nx-cloud?）
+```bash
+npx lerna run build --concurrency=5
+```
+
+此时可以通过 `--concurrency=10` 参数增加并行任务数（依赖 nx-cloud?）,经验证，该 concurrency 参数没发现什么区别
 
 - 1. 并不是一定依赖 `@nrwl/nx-cloud` 需要使用云端配置
 - 2. 下方的 nx.json 同样支持并行任务
 
 > 目前并行任务多，有点卡，还需要继续测试验证。
 
-```js
-// nx.json
+默认情况下，lerna（通过 nx）使用本地计算缓存。（缓存存储一周），要清除缓存运行 `nx reset`
+
+如要共享缓存，可参考 https://lerna.js.org/docs/features/share-your-cache
+
+nx.json 最终配置，更多配置项参考 [Nx.json文件](https://lerna.js.org/docs/api-reference/configuration)
+
+```json
 {
   "extends": "nx/presets/npm.json",
   "tasksRunnerOptions": {
@@ -76,13 +112,11 @@ lerna 默认并行构建 5 个进程，构建(build) 时没问题，但开发时
       }
     }
   },
-  "targetDependencies": {
-    "build": [
-      {
-        "target": "build",
-        "projects": "dependencies"
-      }
-    ]
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["{projectRoot}/dist"]
+    }
   }
 }
 ```
@@ -95,15 +129,17 @@ lerna 默认并行构建 5 个进程，构建(build) 时没问题，但开发时
     - pnpm
 - [lowcode-monorepo](https://github.com/cloudyan/lowcode-monorepo)
 
-这里参考文档时，通过 `npx lerna add-caching` 操作添加的 nx.json 会 targetDefaults 配置，该配置会影响 concurrency，并且新增需要配置 `"extends": "nx/presets/npm.json",`
+这里可通过 `npx lerna add-caching` 配置缓存配置，并添加 `"extends": "nx/presets/npm.json",`
+
+> 请注意，旧版本的 Nx 使用 targetDependencies 而不是 targetDefaults。两者仍然有效，但建议使用 targetDefaults。
+> 该^符号（又名插入符号）仅表示依赖关系
+> `"build": { "dependsOn": ["^build"] }` 意味着特定项目的构建取决于该项目的所有依赖的构建目标的完成
 
 ```js
 // nx.json
 "targetDefaults": {
   "dev": {
-    "dependsOn": [
-      "^dev"
-    ]
+    "dependsOn": ["^dev"] // 此处不能加，原因是特定项目的依赖的构建未完成，导致该特定项目无法开始构建
   },
   "build": {
     "dependsOn": ["^build"],
@@ -115,7 +151,13 @@ lerna 默认并行构建 5 个进程，构建(build) 时没问题，但开发时
 其他的一些配置参考
 
 - https://github.com/lerna/getting-started-example/blob/main/nx.json
-- https://github.com/vsavkin/lerna-dte/blob/main/nx.json
+- https://lerna.js.org/docs/concepts/dte-guide
+  - https://github.com/vsavkin/lerna-dte/blob/main/nx.json
+- 关于 lerna(nx) 有必要了解下[缓存的工作原理](https://lerna.js.org/docs/concepts/how-caching-works)
+  - 默认情况下存储在缓存中`node_modules/.cache/nx`,如要更改
+  - 如果要跳过缓存 `npx lerna run build --skip-nx-cache`
+- 关于 [分布式任务](https://lerna.js.org/docs/concepts/dte-guide)
+  - [示例 repo](https://github.com/vsavkin/lerna-dte)
 
 ```js
 //
@@ -131,11 +173,29 @@ lerna 默认并行构建 5 个进程，构建(build) 时没问题，但开发时
       ],
       "parallel": 10,
       "canTrackAnalytics": false,
-      "showUsageWarnings": true
+      "showUsageWarnings": true,
+
+      // 更改缓存位置, 默认 `node_modules/.cache/nx`
+      "cacheDirectory": "/tmp/mycache"
     }
   }
 },
 ```
+
+### 关于发布
+
+```bash
+lerna version --no-private
+lerna publish --no-private
+```
+
+lerna 版本控制，支持两种模式
+
+1. Fixed/Locked mode (default) 固定/锁定模式
+   1. 如果您想自动将所有包版本绑定在一起，请使用此选项
+   2. 版本保存在 lerna.json 的 version 字段中
+2. Independent mode 独立模式
+   1. 启用该模式，将 lerna.json 中的 version 字段配置为 `independent`
 
 
 ## 以下是 learn@3.x 的学习
