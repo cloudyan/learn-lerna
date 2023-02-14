@@ -272,6 +272,46 @@ lerna 版本控制，支持两种模式
 2. Independent mode 独立模式
    1. 启用该模式，将 lerna.json 中的 version 字段配置为 `independent`
 
+我们推荐使用固定模式，这样在更新时，一个命名空间下的，同步更新版本即可。
+
+下面是梳理的发布命令
+
+```json
+"release:alpha": "npm run release -- --canary --force-publish",
+"release:beta": "release:alpha -- --preid beta",
+"release": "lerna publish --no-private --registry=http://registry.xxx.com/repository/npm/",
+```
+
+说明如下，更多描述参见 [lerna publish](https://github.com/lerna/lerna/tree/main/libs/commands/publish#readme)
+
+- `--canary` 做预览包发布，默认为 alpha 包，还可以指定参数 minor, preminor
+- `--preid` 指定预览包标识，如 beta, next 等
+- `--force-publish` 需要制作超出最近提交更改内容的包的金丝雀版本时，此标志会很有用。
+- `--no-private` 发布时不包含 `pacakge.json` 中包含 `private: true` 的包，这个可省略。
+- `--registry` 指定包发布的仓库
+
+使用示例
+
+```bash
+# 正式包
+Changes:
+ - @xxx/lowcode-canvas-panel: 0.0.2 => 0.0.3
+ - @xxx/lowcode-components-panel: 0.0.2 => 0.0.3
+ - @xxx/lowcode-engine: 0.0.2 => 0.0.3
+ - @xxx/lowcode-plugins: 0.0.2 => 0.0.3
+ - @xxx/lowcode-react-renderer: 0.0.2 => 0.0.3
+ - @xxx/lowcode-setters-panel: 0.0.2 => 0.0.3
+
+# 预发包
+Found 6 packages to publish:
+ - @xxx/lowcode-canvas-panel => 0.0.4-alpha.2+a1c7701
+ - @xxx/lowcode-components-panel => 0.0.4-alpha.2+a1c7701
+ - @xxx/lowcode-engine => 0.0.4-alpha.2+a1c7701
+ - @xxx/lowcode-plugins => 0.0.4-alpha.2+a1c7701
+ - @xxx/lowcode-react-renderer => 0.0.4-alpha.2+a1c7701
+ - @xxx/lowcode-setters-panel => 0.0.4-alpha.2+a1c7701
+```
+
 
 ## 以下是 learn@3.x 的学习
 
