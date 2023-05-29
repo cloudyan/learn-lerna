@@ -91,7 +91,9 @@ packages:
 ```bash
 # 多个项目
 npx lerna run build --scope=header,footer
-npx lerna run build --ignore=header,footer
+npx lerna run build --ignore=header,footer # 这个也无效
+npx lerna run build --ignore=lowcode-ui,footer # 这个无效
+npx lerna run build --scope='@xxx/lowcode-*' # 改为这个了
 # 支持 glob
 npx lerna run --scope package-1 --scope "*-2" lint
 npx lerna run --scope="package-{1,2,5}" test
